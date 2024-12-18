@@ -47,13 +47,14 @@ def process_geografia(entry):
         else:
             return list(nuts_ii)[0], list(nuts_ii)[0]
     else:
-        return 'Múltiplos', 'Múltiplos'
+        return list(nuts_ii)[0], 'Múltiplos'
 
 # Adicionar barra de progresso com tqdm
 tqdm.pandas(desc="Processando geografia")
 
 # Aplicar a função à coluna geografia com tqdm
-combined_df[['NUTS II/NUTS I', 'ambito_geo']] = combined_df['localExecucao'].progress_apply(process_geografia).apply(pd.Series)
+combined_df[['NUTS', 'ambito_geo']] = combined_df['localExecucao'].progress_apply(process_geografia).apply(pd.Series)
 
-# Resultado final
-print(combined_df.head())
+# Save as pickle file
+pkl_output_path = "F:/portal_base/data/processed/portal_base_trimmed.pkl"
+combined_df.to_pickle(pkl_output_path)
